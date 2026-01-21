@@ -26,10 +26,11 @@ ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true \
 WORKDIR /home/node/.n8n/nodes
 RUN npm install puppeteer-extra-plugin-user-preferences
 
-# --- 5. SETUP USER & STARTUP ---
-USER node
+# --- 5. FIX PERMISSIONS (Crucial Step) ---
+# Give ownership of the home directory back to the 'node' user
+RUN chown -R node:node /home/node
 
-# CRITICAL FIX: Override the default entrypoint script
-# This prevents the "operation not permitted" crash
+# --- 6. SETUP USER & STARTUP ---
+USER node
 ENTRYPOINT []
 CMD ["n8n"]
